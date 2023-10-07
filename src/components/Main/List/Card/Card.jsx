@@ -7,7 +7,7 @@ export const Card = ({cardData}) => {
 
   return (
     <li className={style.card}>
-      <a href='!#'>
+      <a className={style.link} href='!#'>
         <img className={style.img} src={src} alt={alt} />
       </a>
     </li>

@@ -9,7 +9,7 @@ export const photosRequestAsync = createAsyncThunk(
     if (!token) return;
 
     try {
-      const res = await axios(`${API_URL}/photos`, {
+      const res = await axios.get(`${API_URL}/photos`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
