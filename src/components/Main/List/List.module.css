@@ -9,3 +9,8 @@
   padding-left: 30px;
   background-clip: padding-box;
 }
+
+.end {
+  width: 100%;
+  list-style: none;
+}

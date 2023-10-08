@@ -9,6 +9,11 @@ export const setToken = (token) => {
 export const getToken = createAsyncThunk('getToken', async () => {
   let token = '';
 
+  if (localStorage.getItem('Bearer')) {
+    token = localStorage.getItem('Bearer');
+    return token;
+  }
+
   if (window.location.search.includes('?code')) {
     const AUTH_CODE = window.location.search.slice(6);
 
@@ -31,13 +36,11 @@ export const getToken = createAsyncThunk('getToken', async () => {
       console.log(data);
       token = await data.data.access_token;
       setToken(token);
+      window.location = 'http://localhost:3000';
     } catch (error) {
       return console.log(error.response);
     }
   }
 
-  if (localStorage.getItem('Bearer')) {
-    token = localStorage.getItem('Bearer');
-  }
   return token;
 });

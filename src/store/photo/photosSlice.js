@@ -1,22 +1,24 @@
 import axios from 'axios';
-import {API_URL} from '../../api/const';
+import {ACCESS_KEY, API_URL} from '../../api/const';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 export const photosRequestAsync = createAsyncThunk(
   'getPhotos',
   async (_, {getState}) => {
-    const token = getState().token.token;
-    if (!token) return;
+    const page = getState().photos.page;
+    const isLast = getState().photos.isLast;
+
+    console.log('page: ', page);
+    if (isLast) return;
 
     try {
-      const res = await axios.get(`${API_URL}/photos`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(
+        `${API_URL}/photos?client_id=${ACCESS_KEY}&page=${page}&per_page=30`,
+      );
 
       const photos = await res.data;
       console.log('photos: ', photos);
+
       return photos;
     } catch (error) {
       console.log(error);
@@ -28,16 +30,18 @@ const initialState = {
   loading: '',
   photos: [],
   error: '',
+  page: 1,
+  isLast: false,
 };
 
 export const photosSlice = createSlice({
   name: 'photos',
   initialState,
-  //   reducers: {
-  //     authLogout: (state) => {
-  //       state.data = '';
-  //     },
-  //   },
+  reducers: {
+    updatePage: (state) => {
+      state.page += 1;
+    },
+  },
   extraReducers: {
     [photosRequestAsync.pending.type]: (state) => {
       state.loading = true;
@@ -45,17 +49,19 @@ export const photosSlice = createSlice({
     },
     [photosRequestAsync.fulfilled.type]: (state, action) => {
       state.loading = false;
-      state.photos = action.payload;
+      state.photos = [...state.photos, ...action.payload];
       state.error = '';
+      state.isLast = !action.payload;
     },
     [photosRequestAsync.rejected.type]: (state, action) => {
       state.loading = false;
       state.data = '';
       state.error = action.payload;
+      state.page = 1;
     },
   },
 });
 
-// export const {authLogout} = authSlice.actions;
+export const {updatePage} = photosSlice.actions;
 
 export default photosSlice.reducer;
