@@ -15,7 +15,6 @@ export const photosRequestAsync = createAsyncThunk(
         `${API_URL}/photos?client_id=${ACCESS_KEY}&page=${page}&per_page=30`,
       );
       const photos = await res.data;
-      console.log('photos: ', photos);
       return photos;
     } catch (error) {
       console.log(error);

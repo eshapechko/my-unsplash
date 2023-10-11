@@ -20,7 +20,6 @@ export const ImagePage = () => {
   const data = useSelector((state) => state.image.image);
   const like = useSelector((state) => state.image.like);
   const likedUser = useSelector((state) => state.image.likedUser);
-  console.log('like: ', like);
   const created = data?.created_at?.slice(0, 10);
 
   useEffect(() => {
