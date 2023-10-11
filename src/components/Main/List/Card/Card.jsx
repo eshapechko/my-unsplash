@@ -8,11 +8,20 @@ export const Card = ({cardData}) => {
   const alt = cardData.alt_description;
   const profile = cardData.user.links.html;
   const id = cardData.id;
+  const width = cardData.width;
+  const height = cardData.height;
 
   return (
     <li className={style.card}>
       <Link className={style.link} to={`/image/${id}`}>
-        <img className={style.img} src={src} alt={alt} />
+        <img
+          className={style.img}
+          style={{
+            aspectRatio: `${width}/${height}`,
+          }}
+          src={src}
+          alt={alt}
+        />
       </Link>
 
       <a className={style.name} target='blank' href={profile}>

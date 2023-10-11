@@ -7,7 +7,6 @@ import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {authLogout, authRequestAsync} from '../../../store/auth/authSlice';
 import {deleteToken} from '../../../store/token/tokenSlice';
-import {getToken} from '../../../api/token';
 
 export const Auth = () => {
   const token = useSelector((state) => state.token.token);
@@ -15,10 +14,6 @@ export const Auth = () => {
   const authData = useSelector((state) => state.auth.data);
 
   const [buttonLogout, setButtonLogout] = useState(false);
-
-  useEffect(() => {
-    dispatch(getToken());
-  }, []);
 
   useEffect(() => {
     dispatch(authRequestAsync());

@@ -10,7 +10,14 @@
   background-clip: padding-box;
 }
 
+.gallery {
+  position: relative;
+}
+
 .end {
+  position: absolute;
+  bottom: 0;
+  right: 0;
   width: 100%;
   list-style: none;
 }

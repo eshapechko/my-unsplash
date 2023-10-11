@@ -15,7 +15,7 @@ import {ReactComponent as LikeIcon} from '../../../assets/clickLike.svg';
 export const ImagePage = () => {
   const dispatch = useDispatch();
   const {id} = useParams();
-  console.log('id: ', id);
+  const token = useSelector((state) => state.token.token);
   const navigate = useNavigate();
   const data = useSelector((state) => state.image.image);
   const like = useSelector((state) => state.image.like);
@@ -34,6 +34,11 @@ export const ImagePage = () => {
   };
 
   const handleLike = (e) => {
+    if (!token) {
+      alert('Пожалуйста авторизуйтесь');
+      return;
+    }
+
     if (!likedUser) {
       dispatch(addLike(id));
       e.currentTarget.classList.add(`${style.colorLike}`);

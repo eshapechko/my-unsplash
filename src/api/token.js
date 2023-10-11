@@ -35,10 +35,8 @@ export const getToken = createAsyncThunk(
             },
           },
         );
-        console.log(data);
         token = await data.data.access_token;
         setToken(token);
-        //   window.location = 'http://localhost:3000';
       } catch (error) {
         return rejectWithValue(error.message);
       }

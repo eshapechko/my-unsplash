@@ -5,14 +5,11 @@ import {useEffect, useRef} from 'react';
 import {photosRequestAsync, updatePage} from '../../../store/photo/photosSlice';
 import {Outlet} from 'react-router-dom';
 import Masonry from 'react-masonry-css';
-import ClipLoader from 'react-spinners/ClipLoader';
 
 export const List = () => {
   const dispatch = useDispatch();
   const photos = useSelector((state) => state.photos.photos);
-  const photoPage = useSelector((state) => state.photos.page);
-  const loading = useSelector((state) => state.photos.loading);
-  console.log('photoPage: ', photoPage);
+  const status = useSelector((state) => state.photos.status);
   const endList = useRef(null);
 
   useEffect(() => {
@@ -21,17 +18,17 @@ export const List = () => {
   }, []);
 
   useEffect(() => {
-    console.log('loadingOBSERV: ', loading);
+    if (!status) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
+        if (entries[0].isIntersecting && status === 'fulfilled') {
           dispatch(photosRequestAsync());
           dispatch(updatePage());
-          console.log('OBSERVER');
         }
       },
       {
-        rootMargin: '100px',
+        rootMargin: '400px',
       },
     );
 
@@ -42,7 +39,7 @@ export const List = () => {
         observer.unobserve(endList.current);
       }
     };
-  }, [endList.current]);
+  }, [endList.current, status]);
 
   const breakpointColumnsObj = {
     default: 6,
@@ -54,25 +51,16 @@ export const List = () => {
 
   return (
     <section className={style.gallery}>
-      {loading ? (
-        <ClipLoader
-          cssOverride={{
-            display: 'block',
-            margin: '0 auto',
-          }}
-          size={200}
-        />
-      ) : (
-        <Masonry
-          breakpointCols={breakpointColumnsObj}
-          className={style.myMasonryGrid}
-          columnClassName={style.myMasonryGridColumn}
-        >
-          {photos?.map((item) => (
-            <Card key={item.id} cardData={item} />
-          ))}
-        </Masonry>
-      )}
+      <Masonry
+        breakpointCols={breakpointColumnsObj}
+        className={style.myMasonryGrid}
+        columnClassName={style.myMasonryGridColumn}
+      >
+        {photos?.map((item) => (
+          <Card key={item.id} cardData={item} />
+        ))}
+      </Masonry>
+
       <div ref={endList} className={style.end} />
 
       <Outlet />

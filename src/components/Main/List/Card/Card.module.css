@@ -4,7 +4,7 @@
   transition: all 0.3s ease-in-out;
   border-radius: 8px;
   overflow: hidden;
-  background: grey;
+  background: var(--white);
   margin-bottom: 30px;
   list-style: none;
 }

@@ -4,11 +4,10 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 export const photosRequestAsync = createAsyncThunk(
   'getPhotos',
-  async (_, {getState}) => {
+  async (_, {getState, rejectWithValue}) => {
     const page = getState().photos.page;
     const isLast = getState().photos.isLast;
 
-    console.log('page: ', page);
     if (isLast) return;
 
     try {
@@ -17,10 +16,10 @@ export const photosRequestAsync = createAsyncThunk(
       );
       const photos = await res.data;
       console.log('photos: ', photos);
-
       return photos;
     } catch (error) {
       console.log(error);
+      return rejectWithValue(error.message);
     }
   },
 );
@@ -31,6 +30,7 @@ const initialState = {
   error: '',
   page: 1,
   isLast: false,
+  status: '',
 };
 
 export const photosSlice = createSlice({
@@ -52,18 +52,21 @@ export const photosSlice = createSlice({
     [photosRequestAsync.pending.type]: (state) => {
       state.loading = true;
       state.error = '';
+      state.status = 'pending';
     },
     [photosRequestAsync.fulfilled.type]: (state, action) => {
       state.loading = false;
       state.photos = [...state.photos, ...action.payload];
       state.error = '';
       state.isLast = !action.payload;
+      state.status = 'fulfilled';
     },
     [photosRequestAsync.rejected.type]: (state, action) => {
       state.loading = false;
       state.data = '';
       state.error = action.payload;
       state.page = 1;
+      state.status = 'failure';
     },
   },
 });
