@@ -27,7 +27,7 @@ export const Auth = () => {
   const delToken = () => {
     dispatch(deleteToken());
     dispatch(authLogout());
-    localStorage.clear();
+    localStorage.removeItem('Bearer');
   };
 
   const handleClick = () => {

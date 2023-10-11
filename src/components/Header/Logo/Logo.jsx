@@ -4,12 +4,14 @@ import {Svg} from '../../../UI/SVG/Svg';
 import {Link} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {clearImage} from '../../../store/imageSlice/imageSlice';
+import {clearPhotos} from '../../../store/photo/photosSlice';
 
 export const Logo = () => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
     dispatch(clearImage());
+    dispatch(clearPhotos());
   };
 
   return (

@@ -6,41 +6,44 @@ export const setToken = (token) => {
   localStorage.setItem('Bearer', token);
 };
 
-export const getToken = createAsyncThunk('getToken', async () => {
-  let token = '';
+export const getToken = createAsyncThunk(
+  'token/getToken',
+  async (_, {rejectWithValue}) => {
+    let token = '';
 
-  if (localStorage.getItem('Bearer')) {
-    token = localStorage.getItem('Bearer');
-    return token;
-  }
-
-  if (window.location.search.includes('?code')) {
-    const AUTH_CODE = window.location.search.slice(6);
-
-    try {
-      const data = await axios.post(
-        API_URL_TOKEN,
-        {
-          client_id: ACCESS_KEY,
-          client_secret: SECRET_KEY,
-          redirect_uri: REDIRECT_URI,
-          code: AUTH_CODE,
-          grant_type: 'authorization_code',
-        },
-        {
-          headers: {
-            'content-type': 'application/json',
-          },
-        },
-      );
-      console.log(data);
-      token = await data.data.access_token;
-      setToken(token);
-      window.location = 'http://localhost:3000';
-    } catch (error) {
-      return console.log(error.response);
+    if (localStorage.getItem('Bearer')) {
+      token = localStorage.getItem('Bearer');
+      return token;
     }
-  }
 
-  return token;
-});
+    if (window.location.search.includes('?code')) {
+      const AUTH_CODE = window.location.search.slice(6);
+
+      try {
+        const data = await axios.post(
+          API_URL_TOKEN,
+          {
+            client_id: ACCESS_KEY,
+            client_secret: SECRET_KEY,
+            redirect_uri: REDIRECT_URI,
+            code: AUTH_CODE,
+            grant_type: 'authorization_code',
+          },
+          {
+            headers: {
+              'content-type': 'application/json',
+            },
+          },
+        );
+        console.log(data);
+        token = await data.data.access_token;
+        setToken(token);
+        //   window.location = 'http://localhost:3000';
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    }
+
+    return token;
+  },
+);

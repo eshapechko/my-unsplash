@@ -2,19 +2,11 @@
 
 :root {
   --black: #333333;
-  --orange: #cc6633;
   --blue: #285784;
   --green: #5bb12c;
   --grey: hsl(0, 0%, 93%);
   --white: hsl(0, 0%, 100%);
-  /* no */
-  --grayF5: hsl(0, 0%, 96%);
-  --greyE6: hsl(0, 0%, 90%);
-  --greyD9: hsl(0, 0%, 85%);
-  --greyBF: hsl(0, 0%, 75%);
-  --grey99: hsl(0, 0%, 60%);
-  --grey66: hsl(0, 0%, 40%);
-  --grey33: hsl(0, 0%, 20%);
+  --red: red;
 }
 
 html {

@@ -15,7 +15,6 @@ export const photosRequestAsync = createAsyncThunk(
       const res = await axios.get(
         `${API_URL}/photos?client_id=${ACCESS_KEY}&page=${page}&per_page=30`,
       );
-
       const photos = await res.data;
       console.log('photos: ', photos);
 
@@ -41,6 +40,13 @@ export const photosSlice = createSlice({
     updatePage: (state) => {
       state.page += 1;
     },
+    clearPhotos: (state) => {
+      state.loading = '';
+      state.photos = [];
+      state.error = '';
+      state.page = 1;
+      state.isLast = false;
+    },
   },
   extraReducers: {
     [photosRequestAsync.pending.type]: (state) => {
@@ -62,6 +68,6 @@ export const photosSlice = createSlice({
   },
 });
 
-export const {updatePage} = photosSlice.actions;
+export const {updatePage, clearPhotos} = photosSlice.actions;
 
 export default photosSlice.reducer;

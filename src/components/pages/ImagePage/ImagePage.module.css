@@ -33,6 +33,10 @@
   height: 40px;
 }
 
+.colorLike {
+  color: var(--red);
+}
+
 .back {
   background-color: var(--blue);
   border: 0;

@@ -4,7 +4,7 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 export const authRequestAsync = createAsyncThunk(
   'getAuth',
-  async (_, {getState}) => {
+  async (_, {getState, rejectWithValue}) => {
     const token = getState().token.token;
     if (!token) return;
 
@@ -15,17 +15,20 @@ export const authRequestAsync = createAsyncThunk(
         },
       });
 
+      if (data.status !== 200) {
+        throw new Error('Can not get auth data. Server Error');
+      }
+
       const authImg = data.data.profile_image.medium;
       const authName = data.data.name;
 
       return {name: authName, authImg};
     } catch (error) {
-      console.log(error);
-      // if (error.toString().includes('401')) {
-      //   alert('Ошибка токена, получите новый токен');
-      // }
+      if (error.message.includes('401')) {
+        alert('Ошибка токена, получите новый токен');
+      }
 
-      // dispatch(delToken());
+      return rejectWithValue(error.message);
     }
   },
 );

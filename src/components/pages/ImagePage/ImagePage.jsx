@@ -2,11 +2,15 @@ import {useDispatch, useSelector} from 'react-redux';
 import style from './ImagePage.module.css';
 import {useEffect} from 'react';
 import {
+  addLike,
   clearImage,
   imageRequestAsync,
+  removeLike,
 } from '../../../store/imageSlice/imageSlice';
+
+import {clearPhotos} from '../../../store/photo/photosSlice';
 import {useNavigate, useParams} from 'react-router-dom';
-import {ReactComponent as LikeIcon} from '../../../assets/like.svg';
+import {ReactComponent as LikeIcon} from '../../../assets/clickLike.svg';
 
 export const ImagePage = () => {
   const dispatch = useDispatch();
@@ -14,7 +18,10 @@ export const ImagePage = () => {
   console.log('id: ', id);
   const navigate = useNavigate();
   const data = useSelector((state) => state.image.image);
-  console.log('data: ', data);
+  const like = useSelector((state) => state.image.like);
+  const likedUser = useSelector((state) => state.image.likedUser);
+  console.log('like: ', like);
+  const created = data?.created_at?.slice(0, 10);
 
   useEffect(() => {
     dispatch(imageRequestAsync(id));
@@ -23,10 +30,17 @@ export const ImagePage = () => {
   const backClick = () => {
     navigate(`/`);
     dispatch(clearImage());
+    dispatch(clearPhotos());
   };
 
-  const handleLike = () => {
-    console.log('LIKESSSS');
+  const handleLike = (e) => {
+    if (!likedUser) {
+      dispatch(addLike(id));
+      e.currentTarget.classList.add(`${style.colorLike}`);
+    } else {
+      dispatch(removeLike(id));
+      e.currentTarget.classList.remove(`${style.colorLike}`);
+    }
   };
 
   return (
@@ -41,13 +55,13 @@ export const ImagePage = () => {
         {data?.user?.name}
       </a>
 
-      <p className={style.data}>{`Created: ${data?.created_at}`}</p>
+      <p className={style.data}>{`Created: ${created}`}</p>
 
       <div className={style.like}>
         <button className={style.btn} onClick={handleLike}>
           <LikeIcon className={style.svg} />
         </button>
-        <span className={style.count}>{data?.likes}</span>
+        <span className={style.count}>{like}</span>
       </div>
 
       <button className={style.back} onClick={backClick}>

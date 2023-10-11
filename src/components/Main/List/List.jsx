@@ -9,7 +9,6 @@ import ClipLoader from 'react-spinners/ClipLoader';
 
 export const List = () => {
   const dispatch = useDispatch();
-  //   const token = useSelector((state) => state.token.token);
   const photos = useSelector((state) => state.photos.photos);
   const photoPage = useSelector((state) => state.photos.page);
   const loading = useSelector((state) => state.photos.loading);
