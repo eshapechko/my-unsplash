@@ -5,6 +5,7 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 export const photosRequestAsync = createAsyncThunk(
   'getPhotos',
   async (_, {getState, rejectWithValue}) => {
+    const token = getState().token.token;
     const page = getState().photos.page;
     const isLast = getState().photos.isLast;
 
@@ -13,6 +14,11 @@ export const photosRequestAsync = createAsyncThunk(
     try {
       const res = await axios.get(
         `${API_URL}/photos?client_id=${ACCESS_KEY}&page=${page}&per_page=30`,
+        {
+          headers: {
+            Authorization: `${token ? `Bearer ${token}` : ''}`,
+          },
+        },
       );
       const photos = await res.data;
       return photos;
