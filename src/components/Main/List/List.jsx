@@ -2,20 +2,28 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Card} from './Card/Card';
 import style from './List.module.css';
 import {useEffect, useRef} from 'react';
-import {photosRequestAsync, updatePage} from '../../../store/photo/photosSlice';
+import {
+  clearPhotos,
+  photosRequestAsync,
+  updatePage,
+} from '../../../store/photo/photosSlice';
 import {Outlet} from 'react-router-dom';
 import Masonry from 'react-masonry-css';
 
 export const List = () => {
   const dispatch = useDispatch();
+  const token = useSelector((state) => state.token.token);
   const photos = useSelector((state) => state.photos.photos);
   const status = useSelector((state) => state.photos.status);
   const endList = useRef(null);
 
   useEffect(() => {
+    if (token) {
+      dispatch(clearPhotos());
+    }
     dispatch(photosRequestAsync());
     dispatch(updatePage());
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     if (!status) return;

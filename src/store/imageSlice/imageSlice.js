@@ -18,7 +18,6 @@ export const imageRequestAsync = createAsyncThunk(
       );
 
       const image = await res.data;
-      console.log('image: ', image);
       return image;
     } catch (error) {
       console.log(error);

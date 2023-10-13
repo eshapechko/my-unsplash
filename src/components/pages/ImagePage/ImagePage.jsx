@@ -24,7 +24,7 @@ export const ImagePage = () => {
 
   useEffect(() => {
     dispatch(imageRequestAsync(id));
-  }, [id]);
+  }, [id, token]);
 
   const backClick = () => {
     navigate(`/`);
