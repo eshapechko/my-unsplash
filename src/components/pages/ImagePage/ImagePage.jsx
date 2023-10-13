@@ -7,7 +7,7 @@ import {
   imageRequestAsync,
   removeLike,
 } from '../../../store/imageSlice/imageSlice';
-
+import cn from 'classnames';
 import {clearPhotos} from '../../../store/photo/photosSlice';
 import {useNavigate, useParams} from 'react-router-dom';
 import {ReactComponent as LikeIcon} from '../../../assets/clickLike.svg';
@@ -40,10 +40,8 @@ export const ImagePage = () => {
 
     if (!likedUser) {
       dispatch(addLike(id));
-      e.currentTarget.classList.add(`${style.colorLike}`);
     } else {
       dispatch(removeLike(id));
-      e.currentTarget.classList.remove(`${style.colorLike}`);
     }
   };
 
@@ -62,7 +60,10 @@ export const ImagePage = () => {
       <p className={style.data}>{`Created: ${created}`}</p>
 
       <div className={style.like}>
-        <button className={style.btn} onClick={handleLike}>
+        <button
+          className={cn(style.btn, likedUser && style.colorLike)}
+          onClick={handleLike}
+        >
           <LikeIcon className={style.svg} />
         </button>
         <span className={style.count}>{like}</span>

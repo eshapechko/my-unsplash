@@ -4,13 +4,21 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 
 export const imageRequestAsync = createAsyncThunk(
   'image/getImage',
-  async (id, {rejectWithValue}) => {
+  async (id, {getState, rejectWithValue}) => {
+    const token = getState().token.token;
+
     try {
       const res = await axios.get(
         `${API_URL}/photos/${id}?client_id=${ACCESS_KEY}`,
+        {
+          headers: {
+            Authorization: `${token ? `Bearer ${token}` : ''}`,
+          },
+        },
       );
 
       const image = await res.data;
+      console.log('image: ', image);
       return image;
     } catch (error) {
       console.log(error);
@@ -29,6 +37,7 @@ export const addLike = createAsyncThunk(
       const response = await axios.post(
         `${API_URL}/photos/${id}/like`,
         {
+          client_id: ACCESS_KEY,
           scope: 'write_likes',
         },
         {
@@ -100,6 +109,7 @@ export const imageSlice = createSlice({
       state.loading = false;
       state.image = action.payload;
       state.like = action.payload.likes;
+      state.likedUser = action.payload.liked_by_user;
       state.error = '';
     },
     [imageRequestAsync.rejected.type]: (state, action) => {

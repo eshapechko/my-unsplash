@@ -21,6 +21,7 @@ export const photosRequestAsync = createAsyncThunk(
         },
       );
       const photos = await res.data;
+      console.log('photos: ', photos);
       return photos;
     } catch (error) {
       console.log(error);
